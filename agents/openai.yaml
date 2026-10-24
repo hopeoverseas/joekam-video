@@ -1,0 +1,4 @@
+interface:
+  display_name: "Joekam Video"
+  short_description: "Joekam 独立视频创作，涵盖口播、短剧、演示、字幕与动画合成"
+  default_prompt: "使用 $joekam-video，根据我的目标、参考视频和现有素材制作或修改视频。"

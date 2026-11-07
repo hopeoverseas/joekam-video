@@ -16,7 +16,7 @@ npx skills add hopeoverseas/joekam-video --skill joekam-video -g
 
 根据提示选择使用的 Agent。`-g` 表示全局安装，省略后为当前项目安装。安装器选项以 [vercel-labs/skills 官方文档](https://github.com/vercel-labs/skills)为准。
 
-手动安装时，将 `SKILL.md`、`agents/`、`references/` 和 `LICENSE` 一起放入 Agent 技能目录中的 `joekam-video/` 文件夹。
+手动安装时，将 `SKILL.md`、`agents/`、`references/`、`scripts/` 和 `LICENSE` 一起放入 Agent 技能目录中的 `joekam-video/` 文件夹。
 
 ## 使用
 
@@ -79,6 +79,7 @@ Agent 根据实际工具完成目标整理、分镜、素材准备、合成与�
 - **现有视频、图片或录屏：**可以用 FFmpeg、ffprobe 或已有剪辑软件在本地处理。
 - **榜单和图形动画：**可以通过绘制和本地渲染完成，不强制接视频 API。
 - **新生成的人物、镜头或声音：**使用你选择的生成服务，也可以使用具备条件的本地模型。
+- **Bach 1.0 Pro：**可选的 Python 客户端支持预览请求，并通过服务方直连接口提交和查询任务；账号权限和费用以所选服务为准，详见[服务指南](references/services/bach.md)。
 - **字幕与导出：**先检查工具实际能力。烧录字幕需要相应滤镜；也可以按交付要求使用字幕轨或外挂字幕。
 
 技能本身没有订阅费和按次渲染费。Agent、生成服务、算力与外部素材可能另有费用和条款。沿用用户已选择的账号、制作范围和预算，不把密钥写进共享文件。
@@ -89,9 +90,10 @@ Agent 根据实际工具完成目标整理、分镜、素材准备、合成与�
 
 ```bash
 python3 tools/check_skill.py
+python3 -B -m unittest discover -s tests -v
 ```
 
-检查覆盖技能标识、调用提示、本地文档链接和许可证文件。实际成片仍需播放检查画面、字幕与声音。
+检查覆盖技能结构和客户端请求处理；客户端测试使用模拟响应，不会生成视频或验证真实账号。实际成片仍需播放检查画面、字幕与声音。
 
 ## 开源与商用
 

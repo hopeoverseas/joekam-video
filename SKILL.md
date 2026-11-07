@@ -4,7 +4,7 @@ description: "Joekam 独立视频创作技能。用于参考视频改编、口�
 license: "MIT"
 metadata:
   author: "joekam"
-  version: "2.0.0"
+  version: "2.1.0"
   repository: "https://github.com/hopeoverseas/joekam-video"
 ---
 
@@ -61,6 +61,9 @@ metadata:
 
 采用本地工具时，使用真实的 FFmpeg、ffprobe 或剪辑软件接口。采用生成服务时，以该服务的
 实际文档确认参考图、时长、尺寸、声音等参数；任务提交后保留任务编号和结果文件。
+
+任务选用 Bach 1.0 Pro 时，读取[可选服务指南](references/services/bach.md)，使用附带客户端
+预览请求、提交和查询任务；服务账号、模型能力与费用以实际可用情况为准。
 
 沿用用户已经选择的账号与预算，估算剩余生成工作，复用已有合格素材。新的付费范围或收费账号
 需要用户决定。凭据通过工具的安全配置管理，不写进脚本、分镜或交付文件。

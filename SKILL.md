@@ -4,7 +4,7 @@ description: "Joekam 独立视频创作技能。用于参考视频改编、口�
 license: "MIT"
 metadata:
   author: "joekam"
-  version: "2.2.0"
+  version: "2.2.1"
   repository: "https://github.com/hopeoverseas/joekam-video"
 ---
 
@@ -63,7 +63,7 @@ metadata:
 实际文档确认参考图、时长、尺寸、声音等参数；任务提交后保留任务编号和结果文件。
 
 任务选用 Bach 1.0 Pro 时，读取[可选服务指南](references/services/bach.md)，使用附带客户端
-预览请求、提交和查询任务；服务账号、模型能力与费用以实际可用情况为准。
+预览请求、提交和查询任务；多参考模式可指定参考视频或音频的起始时间。服务账号、模型能力与费用以实际可用情况为准。
 任务选用 Sume 时，读取[多模型服务指南](references/services/sume.md)，查询当前账号可用模型，
 按用户授权准备素材并提交图片或视频任务。
 

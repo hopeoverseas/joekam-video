@@ -6,6 +6,7 @@
 
 实现依据服务方的[模型概览](https://www.bach.art/api/docs/bach_1_0_pro)、
 [创建任务](https://www.bach.art/api/docs/create_task)和[查询任务](https://www.bach.art/api/docs/query_task)。
+参考素材字段另见[视频生成接口](https://www.bach.art/docs/videos-bach/v2/bach_video_generation)。
 这些接口可能变化，使用前核对当前文档和账号权限；不要把其他平台对同名模型的能力当成直连接口的承诺。
 
 ## 选择输入方式
@@ -50,19 +51,24 @@ r2v 至少需要图片或视频参考，不能只提供音频；图片、视频�
 }
 ~~~
 
-多参考模式则可分别说明图片与动作参考的作用：
+多参考模式可以分别说明图片、动作和声音参考的作用，并为参考视频或音频指定起始时间：
 
 ~~~json
 {
   "task": "r2v",
-  "prompt": "保持 @Image1 的产品外观，参考 @Video1 的镜头运动。",
+  "prompt": "保持 @Image1 的产品外观，参考 @Video1 的镜头运动和 @Audio1 的声音氛围。",
   "duration": 5,
+  "generate_audio": true,
   "reference_inputs": [
     {"type": "image", "url": "https://example.com/product.png"},
-    {"type": "video", "url": "https://example.com/camera.mp4"}
+    {"type": "video", "url": "https://example.com/camera.mp4", "start_time": 1.5},
+    {"type": "audio", "url": "https://example.com/ambience.mp3", "start_time": 0.5}
   ]
 }
 ~~~
+
+`start_time` 是可选的起始时间，以秒为单位且不能小于零；省略时不指定偏移。
+素材的实际时长和适用限制、费用以服务方规则为准，预览不会检查素材本身。
 
 从技能目录运行下面的命令；如果当前目录不同，请使用技能目录中脚本的绝对路径。
 请求文件和任务记录路径替换为项目中的实际路径。

@@ -71,6 +71,41 @@ class BachVideoTests(unittest.TestCase):
         self.assertEqual(result, 1)
         network.assert_not_called()
 
+    def test_reference_video_and_audio_offsets_reach_submission(self):
+        refs = [
+            {"type": "image", "url": "https://example.com/product.png"},
+            {"type": "video", "url": "https://example.com/camera.mp4", "start_time": 1.5},
+            {"type": "audio", "url": "https://example.com/ambience.mp3", "start_time": 0.5},
+        ]
+        self.write_request({"task": "r2v", "prompt": "Use the reference assets.", "reference_inputs": refs})
+        response = FakeResponse({"code": 200, "data": {"task_id": "task-123", "status": "TASK_PENDING"}})
+        with mock.patch.dict(os.environ, {"BACH_API_KEY": "test-secret"}), mock.patch.object(
+            bach, "open_request", return_value=response
+        ) as network:
+            result, _, _ = self.run_command([
+                "submit", "--request", str(self.request_file), "--task-file", str(self.task_file)
+            ])
+        self.assertEqual(result, 0)
+        network.assert_called_once()
+        self.assertEqual(json.loads(network.call_args.args[0].data)["input"]["reference_inputs"], refs)
+
+    def test_negative_reference_offsets_fail_before_network(self):
+        for media_type, url in (("video", "https://example.com/clip.mp4"),
+                                ("audio", "https://example.com/voice.mp3")):
+            with self.subTest(media_type=media_type):
+                self.write_request({
+                    "task": "r2v", "prompt": "A scene.",
+                    "reference_inputs": [
+                        {"type": "image", "url": "https://example.com/product.png"},
+                        {"type": media_type, "url": url, "start_time": -0.1},
+                    ],
+                })
+                with mock.patch.object(bach, "open_request") as network:
+                    result, _, err = self.run_command(["preview", "--request", str(self.request_file)])
+                self.assertEqual(result, 1)
+                self.assertIn("start_time", err)
+                network.assert_not_called()
+
     def test_submit_saves_task_id_without_key(self):
         response = FakeResponse({"code": 200, "data": {"task_id": "task-123", "status": "TASK_PENDING"}})
         with mock.patch.dict(os.environ, {"BACH_API_KEY": "test-secret"}), mock.patch.object(

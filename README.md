@@ -76,6 +76,7 @@ The repository contains instructions and production guides. Video editing and ge
 - **Generated assets:** Use your chosen service or a suitable local model for new images, video shots, or speech. A video API is optional when the project can be made from existing media or authored graphics.
 - **Bach 1.0 Pro:** The optional Python client previews and manages direct API tasks, including image, video and audio references with optional start times for video and audio. See the [service guide](references/services/bach.md); access and charges depend on the selected account.
 - **Sume:** An optional client can list available image and video models, upload authorized media, and manage asynchronous jobs. See the [service guide](references/services/sume.md); access and charges depend on the selected workspace.
+- **Noiz:** An optional client previews and manages sound effects, vocal songs, and covers through the provider's API. See the [audio service guide](references/services/noiz.md); access, media rights, and charges depend on the service and project.
 - **Capabilities:** Check the installed tool's real features. For example, subtitle burn-in requires a build with the relevant filter; subtitle tracks and separate subtitle files are other delivery options.
 - **Billing:** This skill has no subscription or per-render charge. Agent usage, external services, hardware, and media assets may have their own costs and terms.
 
@@ -90,7 +91,7 @@ python3 tools/check_skill.py
 python3 -B -m unittest discover -s tests -v
 ```
 
-The checks cover skill structure and the client’s request handling. The client tests use simulated responses and do not generate a video or verify a live account. They do not substitute for watching and listening to a rendered video.
+The checks cover skill structure and the clients’ request handling. The client tests use simulated responses and do not generate media or verify a live account. They do not substitute for watching and listening to a rendered video.
 
 ## License
 

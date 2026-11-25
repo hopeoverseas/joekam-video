@@ -4,7 +4,7 @@ description: "Joekam 独立视频创作技能。用于参考视频改编、口�
 license: "MIT"
 metadata:
   author: "joekam"
-  version: "2.2.1"
+  version: "2.3.0"
   repository: "https://github.com/hopeoverseas/joekam-video"
 ---
 
@@ -66,6 +66,8 @@ metadata:
 预览请求、提交和查询任务；多参考模式可指定参考视频或音频的起始时间。服务账号、模型能力与费用以实际可用情况为准。
 任务选用 Sume 时，读取[多模型服务指南](references/services/sume.md)，查询当前账号可用模型，
 按用户授权准备素材并提交图片或视频任务。
+任务选用 Noiz 生成音效、带人声的歌曲或翻唱时，读取[音频服务指南](references/services/noiz.md)，
+先预览请求，再按用户授权提交和取回音频。
 
 沿用用户已经选择的账号与预算，估算剩余生成工作，复用已有合格素材。新的付费范围或收费账号
 需要用户决定。凭据通过工具的安全配置管理，不写进脚本、分镜或交付文件。

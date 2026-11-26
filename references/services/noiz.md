@@ -1,15 +1,63 @@
-# Noiz 音效与歌曲
+# Noiz 配音、音效与歌曲
 
-用户选用 Noiz 且已有可用账号时，可用技能附带的 Python 客户端准备音效、带人声的歌曲和翻唱。
+用户选用 Noiz 且已有可用账号时，可用技能附带的 Python 客户端准备配音、声音克隆、音效、带人声的歌曲和翻唱。
 这是可选的外部服务：只有用户授权账号、素材和费用后才提交；没有密钥也能离线预览请求。
 服务能力与价格可能变化，使用前核对[音效说明](https://github.com/NoizAI/skills/tree/main/skills/sound-fx)
 和[歌曲与翻唱说明](https://github.com/NoizAI/skills/tree/main/skills/text-to-music)，并确认素材使用权。
+配音和声音克隆的输入、音频返回格式及账号功能，以服务商的[语音合成](https://docs.noiz.ai/api-documentation/text-to-speech)
+和[声音接口](https://docs.noiz.ai/api-documentation/voices)文档为准。
 
 客户端使用服务商的直连接口：音效同步返回结果地址，歌曲和翻唱返回任务编号，需另行查询。
-歌曲模式需要歌词或歌词主题，不是纯器乐模式。此客户端使用公开 HTTPS 地址作为参考或翻唱素材，
-不自动上传本地音频，也不自动识别歌词；如需这些功能，先确认可用的授权工具与服务规则。
+歌曲模式需要歌词或歌词主题，不是纯器乐模式。`noiz_audio.py` 使用公开 HTTPS 地址作为歌曲参考或翻唱素材，
+不自动上传本地歌曲素材，也不自动识别歌词；配音与声音克隆由另一个客户端 `noiz_voice.py` 处理。
 
-## 准备请求
+## 配音和授权声音克隆
+
+先取得说话人对声音克隆及具体用途的明确授权；提交前再确认用户允许上传样本以及外部服务费用。
+服务会保存克隆出的声音 ID，音频样本和请求记录可能涉及隐私，应按项目要求保存。
+使用现有声音 ID 生成配音时，`speech` 请求中的文字最长 5000 字符；可选 `speed`、`target_lang` 和 `trim_silence`：
+
+~~~json
+{
+  "kind": "speech",
+  "text": "欢迎了解我们的产品。",
+  "voice_id": "your-voice-id",
+  "output_format": "wav",
+  "speed": 1.0
+}
+~~~
+
+如需克隆声音，将本人的授权录音放在请求文件同一目录，或把 `audio_path` 改成实际路径：
+
+~~~json
+{
+  "kind": "clone",
+  "audio_path": "voice-sample.wav",
+  "display_name": "Authorized voice",
+  "consent": true
+}
+~~~
+
+音频样本支持 WAV、MP3、M4A，非空且不超过 25 MiB；也可用 `voice_url` 代替 `audio_path`，
+提供服务可访问的 HTTPS 地址。`audio_path` 和 `voice_url` 只能选一个。地址及其签名可能使其他人访问素材。
+克隆请求可选 `denoise` 和 `language`。布尔字段使用 JSON 的 `true` 或 `false`。
+
+从技能目录执行；`voices` 会连接服务，`preview` 只检查请求和本地样本，不上传或生成：
+
+~~~bash
+python3 scripts/noiz_voice.py voices --type built-in
+python3 scripts/noiz_voice.py preview --request /path/to/clone.json
+python3 scripts/noiz_voice.py clone --request /path/to/clone.json --task-file /path/to/clone-task.json
+python3 scripts/noiz_voice.py preview --request /path/to/speech.json
+python3 scripts/noiz_voice.py speak --request /path/to/speech.json --task-file /path/to/speech-task.json --output /path/to/speech.wav
+~~~
+
+克隆成功后，从结果或任务记录取出 `voice_id`，填入配音请求；也可从账号提供的内置或已有声音中选择。
+每次提交必须指定尚不存在的任务记录；配音直接返回音频，输出文件不会覆盖已有文件。
+发生超时或任务记录仍是 `submission_unconfirmed` 时，先检查服务控制台、费用和输出文件，再决定是否重试。
+代码使用环境变量 `NOIZ_API_KEY`，不要把密钥、口播文字或声音样本放入共享的任务记录。
+
+## 准备音效和歌曲请求
 
 把下列任一 JSON 对象保存为项目中的 `request.json`，按实际画面和素材修改。
 音效时长可选，填写时使用 1 至 30 的整数秒；格式可以是 `wav` 或 `mp3`：
